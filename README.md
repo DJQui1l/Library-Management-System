@@ -29,21 +29,3 @@ Download MySQL Connector/J here:
 👉 [https://dev.mysql.com/downloads/connector/j/](https://dev.mysql.com/downloads/connector/j/)
 
 ---
-
-## 🏗️ Project Setup
-
-### 1. Create the Java Project
-1. Open your IDE.
-2. Create a new Java Project named **LibraryManagement**.
-3. Inside the `src` folder, create a package named `library`.
-4. Add the MySQL Connector/J `.jar` to your project classpath.
-   *(In Eclipse: `Project → Properties → Java Build Path → Libraries → Add External JAR`)*
-
----
-
-## 🗄️ Database Setup
-
-### 1. Create Database
-```sql
-CREATE DATABASE library;
-USE library;
