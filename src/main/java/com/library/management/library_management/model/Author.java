@@ -1,20 +1,37 @@
 package com.library.management.library_management.model;
 
+import jakarta.persistence.*;
+
 /*
 This is an Author.
 */
+
+@Entity
+@Table(name = "AUTHORS")
 public class Author {
 
-    private int id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "author_id")
+    private Integer id;
+
+    @Column(name = "name")
     private String name;
+
+    @Column(name = "phone")
     private String phone;
+
+    @Column(name = "email")
     private String email;
+
+    @Column(name = "address")
     private String address;
+
+    @Column(name = "bio")
     private String bio;
 
 
     public Author(){
-
     }
 
     public Author(String name, String phone, String email, String address, String bio){
@@ -26,8 +43,8 @@ public class Author {
 
     }
 
-    public int getId() {return id;}
-    public void setId(int id) {this.id = id;}
+    public Integer getId() {return id;}
+    public void setId(Integer id) {this.id = id;}
 
     public String getName() {return name;}
     public void setName(String name) {this.name = name;}

@@ -5,15 +5,15 @@ This is a book.
 */
 
 public class Book {
-    private int id;
+    private Integer id;
     private String title;
     private String category;
 
     private String author;
-    private int author_id; // not needed for initialization
+    private Integer author_id; // not needed for initialization
 
     private String publisher;
-    private int publisher_id; // not needed for initialization
+    private Integer publisher_id; // not needed for initialization
 
 
 
@@ -28,8 +28,8 @@ public class Book {
 
     }
 
-    public int getId() {return id;}
-    public void setId(int id) {this.id = id;}
+    public Integer getId() {return id;}
+    public void setId(Integer id) {this.id = id;}
 
     public String getBook_name() {return title;}
     public void setBook_name(String book_name) {this.title = book_name;}
@@ -40,12 +40,12 @@ public class Book {
     public String getAuthor() {return author;}
     public void setAuthor(String author) {this.author = author;}
 
-    public int getAuthor_id() {return author_id;}
-    public void setAuthor_id(int author_id) {this.author_id = author_id;}
+    public Integer getAuthor_id() {return author_id;}
+    public void setAuthor_id(Integer author_id) {this.author_id = author_id;}
 
     public String getPublisher() {return publisher;}
     public void setPublisher(String publisher) {this.publisher = publisher;}
 
-    public int getPublisher_id() {return publisher_id;}
-    public void setPublisher_id(int publisher_id) {this.publisher_id = publisher_id;}
+    public Integer getPublisher_id() {return publisher_id;}
+    public void setPublisher_id(Integer publisher_id) {this.publisher_id = publisher_id;}
 }
