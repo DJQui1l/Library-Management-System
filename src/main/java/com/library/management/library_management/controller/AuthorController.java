@@ -21,7 +21,7 @@ public class AuthorController {
 
     private final AuthorService authorService;
 
-    //create an authorService object hande the business logic for the controller to use.
+    //create an authorService object that handles the business logic for the controller to use.
     public AuthorController(AuthorService authorService) {
         this.authorService = authorService;
     }

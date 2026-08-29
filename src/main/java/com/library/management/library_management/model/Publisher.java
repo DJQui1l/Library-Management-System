@@ -1,11 +1,29 @@
 package com.library.management.library_management.model;
 
+import jakarta.persistence.*;
+
+
+@Entity
+@Table(name = "PUBLISHERS")
 public class Publisher {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private int id;
+
+    @Column(name = "name")
     private String name;
+
+    @Column(name = "address")
+
     private String address;
+
+    @Column(name = "phone")
     private String phone;
+
+    public Publisher(){
+    }
 
     public Publisher(String name, String address, String phone){
         this.name = name;
