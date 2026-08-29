@@ -1,8 +1,5 @@
 package com.library.management.library_management.model;
 
-/*
-This is a Publisher.
-*/
 
 public class Categories {
     private int id;

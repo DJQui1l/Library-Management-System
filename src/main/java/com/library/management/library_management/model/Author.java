@@ -12,12 +12,18 @@ public class Author {
     private String address;
     private String bio;
 
+
+    public Author(){
+
+    }
+
     public Author(String name, String phone, String email, String address, String bio){
         this.name = name;
         this.phone = phone;
         this.email = email;
         this.address = address;
         this.bio = bio;
+
     }
 
     public int getId() {return id;}
@@ -37,5 +43,6 @@ public class Author {
 
     public String getBio() {return bio;}
     public void setBio(String bio) {this.bio = bio;}
+
 }
 
