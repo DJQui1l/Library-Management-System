@@ -62,3 +62,6 @@ replay_pid*
 
 #enviroment variables
 .env
+
+#aws credentials
+library-management-key.pem
