@@ -3,6 +3,8 @@ package com.library.management.library_management.service;
 import com.library.management.library_management.model.Book;
 import com.library.management.library_management.repository.BookRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+import java.io.IOException;
 
 import java.util.List;
 import java.util.Optional;
@@ -11,13 +13,20 @@ import java.util.Optional;
 public class BookService {
 
     private final BookRepository bookRepository;
+    private final S3Service s3Service;
 
-    public BookService(BookRepository bookRepository){
+    public BookService(BookRepository bookRepository, S3Service s3Service){
         this.bookRepository = bookRepository;
+        this.s3Service = s3Service;
     }
 
     // create a book
-    public Book createBook(Book book){
+    public Book createBook(Book book, MultipartFile cover) throws IOException {
+
+        String key = s3Service.uploadFile(cover);
+
+        book.setCoverImageKey(key);
+
         return bookRepository.save(book);
     }
 

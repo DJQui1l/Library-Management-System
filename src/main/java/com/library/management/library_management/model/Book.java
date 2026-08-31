@@ -31,6 +31,8 @@ public class Book {
     @Column(name = "publisher_id",nullable = true)
     private Integer publisher_id;
 
+    private String coverImageKey;
+
 
 
     public Book (){
@@ -65,4 +67,7 @@ public class Book {
 
     public Integer getPublisher_id() {return publisher_id;}
     public void setPublisher_id(Integer publisher_id) {this.publisher_id = publisher_id;}
+
+    public String getCoverImageKey() {return coverImageKey;}
+    public void setCoverImageKey(String coverImageKey) {this.coverImageKey = coverImageKey;}
 }
