@@ -34,7 +34,7 @@ public class PublisherService {
     }
 
     // Delete a Publisher
-    public void deletePublisher(Integer id) {
+    public void deletePublisherById(Integer id) {
         publisherRepository.deleteById(id);
     }
 

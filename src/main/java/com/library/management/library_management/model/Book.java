@@ -1,38 +1,55 @@
 package com.library.management.library_management.model;
 
+import jakarta.persistence.*;
 /*
 This is a book.
 */
 
+@Entity
+@Table(name = "BOOKS")
 public class Book {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
+    @Column(name = "title")
     private String title;
+
+    @Column(name = "category")
     private String category;
 
+    @Column(name = "author")
     private String author;
-    private Integer author_id; // not needed for initialization
 
+    @Column(name = "author_id", nullable = true)
+    private Integer author_id;
+
+    @Column(name = "publisher")
     private String publisher;
-    private Integer publisher_id; // not needed for initialization
+
+    @Column(name = "publisher_id",nullable = true)
+    private Integer publisher_id;
 
 
 
     public Book (){
-
     }
-    public Book(String book_name, String category, String author,  String publisher) {
+    public Book(String book_name, String category, String author, Integer author_id, String publisher, Integer publisher_id) {
         this.title = book_name;
         this.category = category;
         this.author = author;
+        this.author_id = author_id;
         this.publisher = publisher;
+        this.publisher_id = publisher_id;
 
     }
 
     public Integer getId() {return id;}
     public void setId(Integer id) {this.id = id;}
 
-    public String getBook_name() {return title;}
-    public void setBook_name(String book_name) {this.title = book_name;}
+    public String getTitle() {return title;}
+    public void setTitle(String title) {this.title = title;}
 
     public String getCategory() {return category;}
     public void setCategory(String category) {this.category = category;}
