@@ -33,8 +33,6 @@ public class BookService {
     //get all books
     public List<Book> getAllBooks(){
         return bookRepository.findAll();
-
-
     }
 
     //get book by id
@@ -42,6 +40,29 @@ public class BookService {
         return bookRepository.findById(id);
     }
 
+    //update book by id
+    public Book updateBookById(Integer id, Book bookDetails){
+        return bookRepository.findById(id)
+                .map(book -> {
+
+                    //check if the updated book details are not null before updating
+                    if (bookDetails.getTitle() != null){
+                        book.setTitle(bookDetails.getTitle());
+                    }
+                    if (bookDetails.getAuthor() != null){
+                        book.setAuthor(bookDetails.getAuthor());
+                    }
+                    if (bookDetails.getPublisher() != null){
+                        book.setPublisher(bookDetails.getPublisher());
+                    }
+
+
+
+                    return bookRepository.save(book);
+                })
+                .orElse(null);
+
+    }
     //delete book by id
     public void deleteBookById(Integer id){
         bookRepository.deleteById(id);

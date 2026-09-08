@@ -1,5 +1,6 @@
 package com.library.management.library_management.service;
 
+import com.library.management.library_management.model.Author;
 import com.library.management.library_management.model.Publisher;
 import com.library.management.library_management.repository.PublisherRepository;
 import org.springframework.stereotype.Service;
@@ -33,6 +34,30 @@ public class PublisherService {
         return publisherRepository.findById(id);
     }
 
+    //update publisher by ID
+    public Author updatePublisherById(Integer id, Publisher publisherDetails){
+        return publisherRepository.findById(id)
+                .map(author -> {
+                    if (publisherDetails.getName() != null){
+                        author.setName(publisherDetails.getName());
+                    }
+                    if (publisherDetails.getPhone()  != null){
+                        author.setPhone(publisherDetails.getPhone());
+                    }
+                    if (authorDetails.getEmail()  != null){
+                        author.setPhone(authorDetails.getEmail());
+                    }
+                    if (authorDetails.getAddress()  != null){
+                        author.setPhone(authorDetails.getAddress());
+                    }
+                    if (authorDetails.getBio()  != null){
+                        author.setPhone(authorDetails.getBio());
+                    }
+
+                    return authorRepository.save(author);
+
+                }).orElse(null);
+    }
     // Delete a Publisher
     public void deletePublisherById(Integer id) {
         publisherRepository.deleteById(id);

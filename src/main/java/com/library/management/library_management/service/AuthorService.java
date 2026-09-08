@@ -34,6 +34,31 @@ public class AuthorService {
         return authorRepository.findById(id);
     }
 
+    //update author by ID
+    public Author updateAuthorById(Integer id, Author authorDetails){
+        return authorRepository.findById(id)
+                .map(author -> {
+                    if (authorDetails.getName() != null){
+                        author.setName(authorDetails.getName());
+                    }
+                    if (authorDetails.getPhone()  != null){
+                        author.setPhone(authorDetails.getPhone());
+                    }
+                    if (authorDetails.getEmail()  != null){
+                        author.setPhone(authorDetails.getEmail());
+                    }
+                    if (authorDetails.getAddress()  != null){
+                        author.setPhone(authorDetails.getAddress());
+                    }
+                    if (authorDetails.getBio()  != null){
+                        author.setPhone(authorDetails.getBio());
+                    }
+
+                    return authorRepository.save(author);
+
+                }).orElse(null);
+    }
+
     // Delete an Author
     public void deleteAuthorById(Integer id) {
         authorRepository.deleteById(id);
