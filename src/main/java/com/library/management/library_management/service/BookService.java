@@ -55,6 +55,13 @@ public class BookService {
                     if (bookDetails.getPublisher() != null){
                         book.setPublisher(bookDetails.getPublisher());
                     }
+                    if (bookDetails.getPublisher() != null){
+                        book.setPublisher(bookDetails.getPublisher());
+                    }
+                    if (bookDetails.getPublisher() != null){
+                        book.setPublisher(bookDetails.getPublisher());
+                    }
+
 
 
 

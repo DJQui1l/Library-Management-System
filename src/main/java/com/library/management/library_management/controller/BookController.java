@@ -25,12 +25,9 @@ public class BookController {
     }
 
     //create a book
-    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<Book> createBook(
-            @RequestPart("book") Book book,
-            @RequestPart("cover") MultipartFile cover) throws IOException {
-
-        return ResponseEntity.ok(bookService.createBook(book,cover));
+    @PostMapping
+    public ResponseEntity<Book> createBook(@RequestBody Book book) {
+        return ResponseEntity.ok(bookService.createBook(book));
     }
 
     //get all books
@@ -47,8 +44,8 @@ public class BookController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @PutMapping("/id")
-    public ResponseEntity<Book> updateBookById(@PathVariable Integer id, Book book){
+    @PutMapping("/{id}")
+    public ResponseEntity<Book> updateBookById(@PathVariable Integer id, @RequestBody Book book){
         return ResponseEntity.ok(
                 bookService.updateBookById(id, book)
         );
