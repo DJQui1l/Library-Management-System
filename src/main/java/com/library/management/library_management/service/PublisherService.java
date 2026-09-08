@@ -35,26 +35,17 @@ public class PublisherService {
     }
 
     //update publisher by ID
-    public Author updatePublisherById(Integer id, Publisher publisherDetails){
+    public Publisher updatePublisherById(Integer id, Publisher publisherDetails){
         return publisherRepository.findById(id)
                 .map(author -> {
                     if (publisherDetails.getName() != null){
                         author.setName(publisherDetails.getName());
                     }
-                    if (publisherDetails.getPhone()  != null){
+                    if (publisherDetails.getAddress()  != null){
                         author.setPhone(publisherDetails.getPhone());
                     }
-                    if (authorDetails.getEmail()  != null){
-                        author.setPhone(authorDetails.getEmail());
-                    }
-                    if (authorDetails.getAddress()  != null){
-                        author.setPhone(authorDetails.getAddress());
-                    }
-                    if (authorDetails.getBio()  != null){
-                        author.setPhone(authorDetails.getBio());
-                    }
 
-                    return authorRepository.save(author);
+                    return publisherRepository.save(author);
 
                 }).orElse(null);
     }
