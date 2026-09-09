@@ -2,13 +2,7 @@ package com.library.management.library_management.controller;
 
 import com.library.management.library_management.model.Author;
 import com.library.management.library_management.service.AuthorService;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.*;
 // or import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
 
@@ -45,6 +39,16 @@ public class AuthorController {
         return authorService.getAuthorById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Author> updateAuthorById(@PathVariable Integer id, @RequestBody Author authorDetails){
+        Author updatedAuthor = authorService.updateAuthorById(id, authorDetails);
+        if (updatedAuthor != null) {
+            return ResponseEntity.ok(updatedAuthor);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @DeleteMapping("/{id}")

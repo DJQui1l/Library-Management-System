@@ -25,9 +25,13 @@ public class BookController {
     }
 
     //create a book
-    @PostMapping
-    public ResponseEntity<Book> createBook(@RequestBody Book book) {
-        return ResponseEntity.ok(bookService.createBook(book));
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Book> createBook(@RequestPart("book") Book book, @RequestPart("cover") MultipartFile cover) {
+        try {
+            return ResponseEntity.ok(bookService.createBook(book, cover));
+        } catch (IOException e) {
+            return ResponseEntity.internalServerError().build();
+        }
     }
 
     //get all books
@@ -44,11 +48,21 @@ public class BookController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Book> updateBookById(@PathVariable Integer id, @RequestBody Book book){
-        return ResponseEntity.ok(
-                bookService.updateBookById(id, book)
-        );
+    //update a book by ID
+    @PutMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Book> updateBookById(@PathVariable Integer id,
+                                               @RequestPart("book") Book book,
+                                               @RequestPart(value = "cover", required = false) MultipartFile cover){
+        try {
+            Book updatedBook = bookService.updateBookById(id, book, cover);
+            if (updatedBook != null) {
+                return ResponseEntity.ok(updatedBook);
+            } else {
+                return ResponseEntity.notFound().build();
+            }
+        } catch (RuntimeException e) {
+            return ResponseEntity.internalServerError().build();
+        }
     }
 
     @DeleteMapping("/{id}")

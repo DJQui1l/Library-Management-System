@@ -42,13 +42,18 @@ public class PublisherService {
                         author.setName(publisherDetails.getName());
                     }
                     if (publisherDetails.getAddress()  != null){
+                        author.setAddress(publisherDetails.getAddress());
+                    }
+                    if (publisherDetails.getPhone()  != null){
                         author.setPhone(publisherDetails.getPhone());
                     }
+
 
                     return publisherRepository.save(author);
 
                 }).orElse(null);
     }
+
     // Delete a Publisher
     public void deletePublisherById(Integer id) {
         publisherRepository.deleteById(id);

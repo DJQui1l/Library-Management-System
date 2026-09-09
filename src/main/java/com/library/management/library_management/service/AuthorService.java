@@ -45,13 +45,13 @@ public class AuthorService {
                         author.setPhone(authorDetails.getPhone());
                     }
                     if (authorDetails.getEmail()  != null){
-                        author.setPhone(authorDetails.getEmail());
+                        author.setEmail(authorDetails.getEmail());
                     }
                     if (authorDetails.getAddress()  != null){
-                        author.setPhone(authorDetails.getAddress());
+                        author.setAddress(authorDetails.getAddress());
                     }
                     if (authorDetails.getBio()  != null){
-                        author.setPhone(authorDetails.getBio());
+                        author.setBio(authorDetails.getBio());
                     }
 
                     return authorRepository.save(author);
