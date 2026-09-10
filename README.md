@@ -5,13 +5,13 @@ A simple **Library Management System** built with **Java (Swing + JDBC)** and **
 ---
 
 ## 🧩 Features
-- ✅ Admin Login
-- 📘 Manage Books
-- 🧑‍💼 Manage Authors
-- 🏷️ Manage Categories
-- 🏢 Manage Publishers
+- ✅ Admin Login - not yet
+- 📘 Manage Books - good
+- 🧑‍💼 Manage Authors - good
+- 🏷️ Manage Categories - not yet
+- 🏢 Manage Publishers - good
 - 📅 Issue and Return Books
-- 💾 MySQL Database Integration via JDBC
+- 💾 MySQL Database Integration via JDBC - good
 
 ---
 
