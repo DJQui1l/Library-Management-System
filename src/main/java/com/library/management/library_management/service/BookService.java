@@ -1,5 +1,9 @@
 package com.library.management.library_management.service;
 
+import com.library.management.library_management.model.Author;
+import com.library.management.library_management.repository.AuthorRepository;
+import com.library.management.library_management.model.Publisher;
+import com.library.management.library_management.repository.PublisherRepository;
 import com.library.management.library_management.model.Book;
 import com.library.management.library_management.repository.BookRepository;
 import org.springframework.stereotype.Service;
@@ -14,12 +18,18 @@ public class BookService {
 
     private final BookRepository bookRepository;
     private final S3Service s3Service;
+    private final AuthorRepository authorRepository;
+    private final PublisherRepository publisherRepository;
 
     public BookService(BookRepository bookRepository,
-                       S3Service s3Service
+                       S3Service s3Service,
+                       AuthorRepository authorRepository,
+                       PublisherRepository publisherRepository
     ){
         this.bookRepository = bookRepository;
         this.s3Service = s3Service;
+        this.authorRepository = authorRepository;
+        this.publisherRepository = publisherRepository;
     }
 
     // create a book
@@ -31,6 +41,18 @@ public class BookService {
 
         book.setCoverImageKey(key);
 
+
+        //find author by id
+        Author author = authorRepository.findById(book.getAuthor_id())
+                .orElseThrow(() -> new IllegalArgumentException("Author not found with id: " + book.getAuthor_id()));
+        book.setAuthor(author.getName());
+
+
+        //find publisher by id
+        Publisher publisher = publisherRepository.findById(book.getPublisher_id())
+                .orElseThrow(() -> new IllegalArgumentException("Publisher not found with id: " + book.getPublisher_id()));
+        book.setPublisher(publisher.getName());
+
         return bookRepository.save(book);
     }
 
@@ -40,7 +62,7 @@ public class BookService {
     }
 
     //get book by id
-    public Optional<Book> getBookById(Integer id){
+    public Optional<Book> getBookById(Integer id) {
         return bookRepository.findById(id);
     }
 

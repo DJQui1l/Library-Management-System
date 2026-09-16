@@ -62,6 +62,60 @@ class PublisherControllerTest {
         System.out.println("Publisher created: " + testPublisher.getName());
         verify(publisherService, times(1)).createPublisher(any(Publisher.class));
     }
+    @Test
+    void create10PublishersAtOnce_ShouldReturnCreatedPublishers() throws Exception {
+        // Arrange
+        String[] names = {
+                "Zondervan",
+                "Thomas Nelson",
+                "HarperCollins",
+                "B&H Publishing",
+                "Multnomah",
+                "Windblown Media",
+                "Northfield Publishing",
+                "Tyndale House",
+                "Bethany House",
+                "Revell"
+        };
+
+        String[] addresses = {
+                "5300 Patterson Ave SE, Grand Rapids, MI",
+                "501 Thomas Nelson Dr, Nashville, TN",
+                "195 Broadway, New York, NY",
+                "127 Ninth Ave N, Nashville, TN",
+                "12265 Oracle Blvd, Colorado Springs, CO",
+                "PO Box 7213, Wichita, KS",
+                "501 W. 2nd St, Bloomington, MN",
+                "1 Tyndale Park Dr, Carol Stream, IL",
+                "3900 Bethany Dr, Bloomington, MN",
+                "PO Box 1215, Grand Rapids, MI"
+        };
+
+        // Act & Assert
+        for (int i = 0; i < 10; i++) {
+            Publisher publisher = new Publisher();
+            publisher.setId(i + 1);
+            publisher.setName(names[i]);
+            publisher.setAddress(addresses[i]);
+            publisher.setPhone("555-" + String.format("%04d", i + 1));
+
+            when(publisherService.createPublisher(any(Publisher.class))).thenReturn(publisher);
+
+            String publisherJson = objectMapper.writeValueAsString(publisher);
+
+            mockMvc.perform(post("/api/publishers")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(publisherJson))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.id").value(i + 1))
+                    .andExpect(jsonPath("$.name").value(names[i]));
+
+            System.out.println("Publisher created: " + publisher.getName() + " (ID: " + (i + 1) + ")");
+        }
+
+        System.out.println("Total publishers created: 10");
+        verify(publisherService, times(10)).createPublisher(any(Publisher.class));
+    }
 
     @Test
     void getAllPublishers_ShouldReturnListOfPublishers() throws Exception {
@@ -126,58 +180,5 @@ class PublisherControllerTest {
         verify(publisherService, times(1)).deletePublisherById(1);
     }
 
-    @Test
-    void create10PublishersAtOnce_ShouldReturnCreatedPublishers() throws Exception {
-        // Arrange
-        String[] names = {
-            "Zondervan",
-            "Thomas Nelson",
-            "HarperCollins",
-            "B&H Publishing",
-            "Multnomah",
-            "Windblown Media",
-            "Northfield Publishing",
-            "Tyndale House",
-            "Bethany House",
-            "Revell"
-        };
 
-        String[] addresses = {
-            "5300 Patterson Ave SE, Grand Rapids, MI",
-            "501 Thomas Nelson Dr, Nashville, TN",
-            "195 Broadway, New York, NY",
-            "127 Ninth Ave N, Nashville, TN",
-            "12265 Oracle Blvd, Colorado Springs, CO",
-            "PO Box 7213, Wichita, KS",
-            "501 W. 2nd St, Bloomington, MN",
-            "1 Tyndale Park Dr, Carol Stream, IL",
-            "3900 Bethany Dr, Bloomington, MN",
-            "PO Box 1215, Grand Rapids, MI"
-        };
-
-        // Act & Assert
-        for (int i = 0; i < 10; i++) {
-            Publisher publisher = new Publisher();
-            publisher.setId(i + 1);
-            publisher.setName(names[i]);
-            publisher.setAddress(addresses[i]);
-            publisher.setPhone("555-" + String.format("%04d", i + 1));
-
-            when(publisherService.createPublisher(any(Publisher.class))).thenReturn(publisher);
-
-            String publisherJson = objectMapper.writeValueAsString(publisher);
-
-            mockMvc.perform(post("/api/publishers")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(publisherJson))
-                    .andExpect(status().isOk())
-                    .andExpect(jsonPath("$.id").value(i + 1))
-                    .andExpect(jsonPath("$.name").value(names[i]));
-
-            System.out.println("Publisher created: " + publisher.getName() + " (ID: " + (i + 1) + ")");
-        }
-
-        System.out.println("Total publishers created: 10");
-        verify(publisherService, times(10)).createPublisher(any(Publisher.class));
-    }
 }
