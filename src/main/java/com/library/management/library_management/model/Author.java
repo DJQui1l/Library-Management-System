@@ -1,6 +1,7 @@
 package com.library.management.library_management.model;
 
 import jakarta.persistence.*;
+import java.util.List;
 
 /*
 This is an Author.
@@ -30,6 +31,8 @@ public class Author {
     @Column(name = "bio")
     private String bio;
 
+    @OneToMany(mappedBy = "authorEntity", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Book> books;
 
     public Author(){
     }
@@ -60,6 +63,9 @@ public class Author {
 
     public String getBio() {return bio;}
     public void setBio(String bio) {this.bio = bio;}
+
+    public List<Book> getBooks() {return books;}
+    public void setBooks(List<Book> books) {this.books = books;}
 
 }
 

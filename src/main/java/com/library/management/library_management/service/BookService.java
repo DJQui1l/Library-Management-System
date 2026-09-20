@@ -41,16 +41,14 @@ public class BookService {
 
         book.setCoverImageKey(key);
 
-
         //find author by id
-        Author author = authorRepository.findById(book.getAuthor_id())
-                .orElseThrow(() -> new IllegalArgumentException("Author not found with id: " + book.getAuthor_id()));
+        Author author = authorRepository.findById(book.getAuthorEntity().getId())
+                .orElseThrow(() -> new IllegalArgumentException("Author not found with id: " + book.getAuthorEntity().getId()));
         book.setAuthor(author.getName());
 
-
         //find publisher by id
-        Publisher publisher = publisherRepository.findById(book.getPublisher_id())
-                .orElseThrow(() -> new IllegalArgumentException("Publisher not found with id: " + book.getPublisher_id()));
+        Publisher publisher = publisherRepository.findById(book.getPublisherEntity().getId())
+                .orElseThrow(() -> new IllegalArgumentException("Publisher not found with id: " + book.getPublisherEntity().getId()));
         book.setPublisher(publisher.getName());
 
         return bookRepository.save(book);
@@ -82,14 +80,42 @@ public class BookService {
                     if (bookDetails.getAuthor() != null){
                         book.setAuthor(bookDetails.getAuthor());
                     }
-                    if (bookDetails.getAuthor_id() != null){
-                        book.setAuthor_id(bookDetails.getAuthor_id());
+                    // Collect validation errors
+                    StringBuilder errors = new StringBuilder();
+
+                    if (bookDetails.getAuthorEntity().getId() != null){
+                        //find author by id
+                        Author author = authorRepository.findById(bookDetails.getAuthorEntity().getId())
+                                .orElse(null);
+                        if (author == null) {
+                            errors.append("Author not found with id: ").append(bookDetails.getAuthorEntity().getId()).append(". ");
+                        } else {
+                            // set author entity id and name for book's foreign key relationship to it.
+                            book.getAuthorEntity().setId(author.getId());
+                            book.setAuthor(author.getName());
+                        }
                     }
+
                     if (bookDetails.getPublisher() != null){
                         book.setPublisher(bookDetails.getPublisher());
                     }
-                    if (bookDetails.getPublisher_id() != null){
-                        book.setPublisher_id(bookDetails.getPublisher_id());
+
+                    if (bookDetails.getPublisherEntity().getId() != null){
+                        //find publisher by id
+                        Publisher publisher = publisherRepository.findById(bookDetails.getPublisherEntity().getId())
+                                .orElse(null);
+                        if (publisher == null) {
+                            errors.append("Publisher not found with id: ").append(bookDetails.getPublisherEntity().getId()).append(". ");
+                        } else {
+                            // set publisher entity id and name for book's foreign key relationship to it.
+                            book.getPublisherEntity().setId(publisher.getId());
+                            book.setPublisher(publisher.getName());
+                        }
+                    }
+
+                    // Throw combined error if any validation failed
+                    if (errors.length() > 0) {
+                        throw new IllegalArgumentException(errors.toString().trim());
                     }
 
                     if (cover != null){

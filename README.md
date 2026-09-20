@@ -10,7 +10,7 @@ A simple **Library Management System** built with **Java (Swing + JDBC)** and **
 - 🧑‍💼 Manage Authors - good
 - 🏷️ Manage Categories - not yet
 - 🏢 Manage Publishers - good
-- 📅 Issue and Return Books
+- 📅 Issue and Return Books - not yet
 - 💾 MySQL Database Integration via JDBC - good
 
 ---

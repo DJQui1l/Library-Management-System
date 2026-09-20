@@ -202,4 +202,234 @@ class BookServiceTest {
         verify(authorRepository, times(1)).findById(2);
         verify(publisherRepository, times(1)).findById(2);
     }
+
+    @Test
+    void updateBookById_WhenBookExists_ShouldUpdateFields() {
+        // Arrange
+        Book updatedDetails = new Book();
+        updatedDetails.setTitle("Updated Title");
+        updatedDetails.setCategory("Updated Category");
+        updatedDetails.setAuthor("Updated Author");
+        updatedDetails.setPublisher("Updated Publisher");
+
+        when(bookRepository.findById(1)).thenReturn(Optional.of(battleOfTheMind));
+        when(bookRepository.save(any(Book.class))).thenReturn(battleOfTheMind);
+
+        // Act
+        Book result = bookService.updateBookById(1, updatedDetails, null);
+
+        // Assert
+        assertNotNull(result);
+        assertEquals("Updated Title", battleOfTheMind.getTitle());
+        assertEquals("Updated Category", battleOfTheMind.getCategory());
+        assertEquals("Updated Author", battleOfTheMind.getAuthor());
+        assertEquals("Updated Publisher", battleOfTheMind.getPublisher());
+        verify(bookRepository, times(1)).findById(1);
+        verify(bookRepository, times(1)).save(battleOfTheMind);
+
+        System.out.println("Test passed: Book fields updated successfully");
+    }
+
+    @Test
+    void updateBookById_WhenAuthorIdProvidedAndExists_ShouldUpdateAuthorId() {
+        // Arrange
+        Author rickWarren = new Author();
+        rickWarren.setId(2);
+        rickWarren.setName("Rick Warren");
+
+        Book updatedDetails = new Book();
+        updatedDetails.setAuthor_id(2);
+
+        when(bookRepository.findById(1)).thenReturn(Optional.of(battleOfTheMind));
+        when(authorRepository.findById(2)).thenReturn(Optional.of(rickWarren));
+        when(bookRepository.save(any(Book.class))).thenReturn(battleOfTheMind);
+
+        // Act
+        Book result = bookService.updateBookById(1, updatedDetails, null);
+
+        // Assert
+        assertNotNull(result);
+        assertEquals(2, battleOfTheMind.getAuthor_id());
+        verify(bookRepository, times(1)).findById(1);
+        verify(authorRepository, times(1)).findById(2);
+        verify(bookRepository, times(1)).save(battleOfTheMind);
+
+        System.out.println("Test passed: Author ID updated to 2");
+    }
+
+    @Test
+    void updateBookById_WhenAuthorIdProvidedAndNotFound_ShouldThrowIllegalArgumentException() {
+        // Arrange
+        Book updatedDetails = new Book();
+        updatedDetails.setAuthor_id(999);
+
+        when(bookRepository.findById(1)).thenReturn(Optional.of(battleOfTheMind));
+        when(authorRepository.findById(999)).thenReturn(Optional.empty());
+
+        // Act & Assert
+        IllegalArgumentException exception = assertThrows(
+                IllegalArgumentException.class,
+                () -> bookService.updateBookById(1, updatedDetails, null)
+        );
+
+        assertEquals("Author not found with id: 999.", exception.getMessage());
+        verify(bookRepository, times(1)).findById(1);
+        verify(authorRepository, times(1)).findById(999);
+        verify(bookRepository, never()).save(any());
+
+        System.out.println("Test passed: IllegalArgumentException thrown when author not found (ID: 999)");
+    }
+
+    @Test
+    void updateBookById_WhenPublisherIdProvidedAndExists_ShouldUpdatePublisherId() {
+        // Arrange
+        Publisher zondervan = new Publisher();
+        zondervan.setId(2);
+        zondervan.setName("Zondervan");
+
+        Book updatedDetails = new Book();
+        updatedDetails.setPublisher_id(2);
+
+        when(bookRepository.findById(1)).thenReturn(Optional.of(battleOfTheMind));
+        when(publisherRepository.findById(2)).thenReturn(Optional.of(zondervan));
+        when(bookRepository.save(any(Book.class))).thenReturn(battleOfTheMind);
+
+        // Act
+        Book result = bookService.updateBookById(1, updatedDetails, null);
+
+        // Assert
+        assertNotNull(result);
+        assertEquals(2, battleOfTheMind.getPublisher_id());
+        verify(bookRepository, times(1)).findById(1);
+        verify(publisherRepository, times(1)).findById(2);
+        verify(bookRepository, times(1)).save(battleOfTheMind);
+
+        System.out.println("Test passed: Publisher ID updated to 2");
+    }
+
+    @Test
+    void updateBookById_WhenPublisherIdProvidedAndNotFound_ShouldThrowIllegalArgumentException() {
+        // Arrange
+        Book updatedDetails = new Book();
+        updatedDetails.setPublisher_id(999);
+
+        when(bookRepository.findById(1)).thenReturn(Optional.of(battleOfTheMind));
+        when(publisherRepository.findById(999)).thenReturn(Optional.empty());
+
+        // Act & Assert
+        IllegalArgumentException exception = assertThrows(
+                IllegalArgumentException.class,
+                () -> bookService.updateBookById(1, updatedDetails, null)
+        );
+
+        assertEquals("Publisher not found with id: 999.", exception.getMessage());
+        verify(bookRepository, times(1)).findById(1);
+        verify(publisherRepository, times(1)).findById(999);
+        verify(bookRepository, never()).save(any());
+
+        System.out.println("Test passed: IllegalArgumentException thrown when publisher not found (ID: 999)");
+    }
+
+    @Test
+    void updateBookById_WhenBothIdsProvidedAndExist_ShouldUpdateBoth() {
+        // Arrange
+        Author rickWarren = new Author();
+        rickWarren.setId(2);
+        rickWarren.setName("Rick Warren");
+
+        Publisher zondervan = new Publisher();
+        zondervan.setId(2);
+        zondervan.setName("Zondervan");
+
+        Book updatedDetails = new Book();
+        updatedDetails.setAuthor_id(2);
+        updatedDetails.setPublisher_id(2);
+
+        when(bookRepository.findById(1)).thenReturn(Optional.of(battleOfTheMind));
+        when(authorRepository.findById(2)).thenReturn(Optional.of(rickWarren));
+        when(publisherRepository.findById(2)).thenReturn(Optional.of(zondervan));
+        when(bookRepository.save(any(Book.class))).thenReturn(battleOfTheMind);
+
+        // Act
+        Book result = bookService.updateBookById(1, updatedDetails, null);
+
+        // Assert
+        assertNotNull(result);
+        assertEquals(2, battleOfTheMind.getAuthor_id());
+        assertEquals(2, battleOfTheMind.getPublisher_id());
+        verify(bookRepository, times(1)).findById(1);
+        verify(authorRepository, times(1)).findById(2);
+        verify(publisherRepository, times(1)).findById(2);
+        verify(bookRepository, times(1)).save(battleOfTheMind);
+
+        System.out.println("Test passed: Both Author ID and Publisher ID updated to 2");
+    }
+
+    @Test
+    void updateBookById_WhenBothIdsNotFound_ShouldThrowCombinedIllegalArgumentException() {
+        // Arrange
+        Book updatedDetails = new Book();
+        updatedDetails.setAuthor_id(999);
+        updatedDetails.setPublisher_id(888);
+
+        when(bookRepository.findById(1)).thenReturn(Optional.of(battleOfTheMind));
+        when(authorRepository.findById(999)).thenReturn(Optional.empty());
+        when(publisherRepository.findById(888)).thenReturn(Optional.empty());
+
+        // Act & Assert
+        IllegalArgumentException exception = assertThrows(
+                IllegalArgumentException.class,
+                () -> bookService.updateBookById(1, updatedDetails, null)
+        );
+
+        assertEquals("Author not found with id: 999. Publisher not found with id: 888.", exception.getMessage());
+        verify(bookRepository, times(1)).findById(1);
+        verify(authorRepository, times(1)).findById(999);
+        verify(publisherRepository, times(1)).findById(888);
+        verify(bookRepository, never()).save(any());
+
+        System.out.println("Test passed: Combined IllegalArgumentException thrown when both author and publisher not found");
+    }
+
+    @Test
+    void updateBookById_WhenBookNotFound_ShouldReturnNull() {
+        // Arrange
+        Book updatedDetails = new Book();
+        updatedDetails.setTitle("Updated Title");
+
+        when(bookRepository.findById(1)).thenReturn(Optional.empty());
+
+        // Act
+        Book result = bookService.updateBookById(1, updatedDetails, null);
+
+        // Assert
+        assertNull(result);
+        verify(bookRepository, times(1)).findById(1);
+        verify(bookRepository, never()).save(any());
+
+        System.out.println("Test passed: Null returned when book not found (ID: 1)");
+    }
+
+    @Test
+    void updateBookById_WhenCoverProvided_ShouldUploadAndUpdateCoverKey() throws IOException {
+        // Arrange
+        Book updatedDetails = new Book();
+        updatedDetails.setTitle("Updated Title");
+
+        when(bookRepository.findById(1)).thenReturn(Optional.of(battleOfTheMind));
+        when(s3Service.uploadFile(any(MultipartFile.class))).thenReturn("books/updated_cover.jpg");
+        when(bookRepository.save(any(Book.class))).thenReturn(battleOfTheMind);
+
+        // Act
+        Book result = bookService.updateBookById(1, updatedDetails, coverImage);
+
+        // Assert
+        assertNotNull(result);
+        assertEquals("books/updated_cover.jpg", battleOfTheMind.getCoverImageKey());
+        verify(bookRepository, times(1)).findById(1);
+        verify(s3Service, times(1)).uploadFile(coverImage);
+        verify(bookRepository, times(1)).save(battleOfTheMind);
+
+        System.out.println("Test passed: Cover image uploaded and updated successfully");
+    }
 }

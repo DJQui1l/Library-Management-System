@@ -1,6 +1,7 @@
 package com.library.management.library_management.model;
 
 import jakarta.persistence.*;
+import java.util.List;
 
 
 @Entity
@@ -22,6 +23,9 @@ public class Publisher {
     @Column(name = "phone")
     private String phone;
 
+    @OneToMany(mappedBy = "publisherEntity", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Book> books;
+
     public Publisher(){
     }
 
@@ -42,4 +46,7 @@ public class Publisher {
 
     public String getPhone() {return phone;}
     public void setPhone(String phone) {this.phone = phone;}
+
+    public List<Book> getBooks() {return books;}
+    public void setBooks(List<Book> books) {this.books = books;}
 }
