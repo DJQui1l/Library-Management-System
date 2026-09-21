@@ -1,11 +1,11 @@
 package com.library.management.library_management.model;
 
 
-public class Categories {
+public class Category {
     private int id;
     private String name;
 
-    public Categories(String name){
+    public Category(String name){
         this.name = name;
     }
 
