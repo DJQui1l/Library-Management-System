@@ -1,10 +1,12 @@
 package com.library.management.library_management.service;
 import com.library.management.library_management.model.Category;
 import com.library.management.library_management.repository.CategoryRepository;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
+@Service
 public class CategoryService {
 
     private final CategoryRepository categoryRepository;
@@ -30,8 +32,15 @@ public class CategoryService {
     }
 
     //update a category
-    public Category updateCategory(Category category){
-        return categoryRepository.save(category);
+    public Category updateCategory(Integer id, Category categoryDetails){
+
+        return categoryRepository.findById(id)
+                .map(category -> {
+                    if (categoryDetails.getName() != null){
+                        category.setName(categoryDetails.getName());
+                    }
+                    return categoryRepository.save(category);
+                }).orElse(null);
     }
 
 

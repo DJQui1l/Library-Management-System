@@ -68,8 +68,8 @@ class BookServiceTest {
         battleOfTheMind.setId(1);
         battleOfTheMind.setTitle("The Battle of the Mind");
         battleOfTheMind.setCategory("Christian Living");
-        battleOfTheMind.setAuthor_id(1); // References Joyce Meyer
-        battleOfTheMind.setPublisher_id(1); // References FaithWords
+        battleOfTheMind.setAuthorEntity(joyceMeyer); // References Joyce Meyer
+        battleOfTheMind.setPublisherEntity(faithWords); // References FaithWords
 
         // Create mock cover image
         coverImage = new MockMultipartFile(
@@ -182,8 +182,8 @@ class BookServiceTest {
         Book purposeDrivenLife = new Book();
         purposeDrivenLife.setId(2);
         purposeDrivenLife.setTitle("The Purpose Driven Life");
-        purposeDrivenLife.setAuthor_id(2);
-        purposeDrivenLife.setPublisher_id(2);
+        purposeDrivenLife.setAuthorEntity(rickWarren);
+        purposeDrivenLife.setPublisherEntity(zondervan);
 
         when(s3Service.uploadFile(any(MultipartFile.class))).thenReturn("books/purpose_driven_life_cover.jpg");
         when(authorRepository.findById(2)).thenReturn(Optional.of(rickWarren));
@@ -238,7 +238,7 @@ class BookServiceTest {
         rickWarren.setName("Rick Warren");
 
         Book updatedDetails = new Book();
-        updatedDetails.setAuthor_id(2);
+        updatedDetails.setAuthorEntity(rickWarren);
 
         when(bookRepository.findById(1)).thenReturn(Optional.of(battleOfTheMind));
         when(authorRepository.findById(2)).thenReturn(Optional.of(rickWarren));
@@ -249,19 +249,23 @@ class BookServiceTest {
 
         // Assert
         assertNotNull(result);
-        assertEquals(2, battleOfTheMind.getAuthor_id());
+        assertEquals(2, battleOfTheMind.getAuthorEntity().getId());
         verify(bookRepository, times(1)).findById(1);
         verify(authorRepository, times(1)).findById(2);
         verify(bookRepository, times(1)).save(battleOfTheMind);
 
-        System.out.println("Test passed: Author ID updated to 2");
+        System.out.println("Test passed: Author updated to Rick Warren");
     }
 
     @Test
     void updateBookById_WhenAuthorIdProvidedAndNotFound_ShouldThrowIllegalArgumentException() {
         // Arrange
+        Author unknownAuthor = new Author();
+        unknownAuthor.setId(999);
+        unknownAuthor.setName("Unknown Author");
+
         Book updatedDetails = new Book();
-        updatedDetails.setAuthor_id(999);
+        updatedDetails.setAuthorEntity(unknownAuthor);
 
         when(bookRepository.findById(1)).thenReturn(Optional.of(battleOfTheMind));
         when(authorRepository.findById(999)).thenReturn(Optional.empty());
@@ -288,7 +292,7 @@ class BookServiceTest {
         zondervan.setName("Zondervan");
 
         Book updatedDetails = new Book();
-        updatedDetails.setPublisher_id(2);
+        updatedDetails.setPublisherEntity(zondervan);
 
         when(bookRepository.findById(1)).thenReturn(Optional.of(battleOfTheMind));
         when(publisherRepository.findById(2)).thenReturn(Optional.of(zondervan));
@@ -299,19 +303,23 @@ class BookServiceTest {
 
         // Assert
         assertNotNull(result);
-        assertEquals(2, battleOfTheMind.getPublisher_id());
+        assertEquals(2, battleOfTheMind.getPublisherEntity().getId());
         verify(bookRepository, times(1)).findById(1);
         verify(publisherRepository, times(1)).findById(2);
         verify(bookRepository, times(1)).save(battleOfTheMind);
 
-        System.out.println("Test passed: Publisher ID updated to 2");
+        System.out.println("Test passed: Publisher updated to Zondervan");
     }
 
     @Test
     void updateBookById_WhenPublisherIdProvidedAndNotFound_ShouldThrowIllegalArgumentException() {
         // Arrange
+        Publisher unknownPublisher = new Publisher();
+        unknownPublisher.setId(999);
+        unknownPublisher.setName("Unknown Publisher");
+
         Book updatedDetails = new Book();
-        updatedDetails.setPublisher_id(999);
+        updatedDetails.setPublisherEntity(unknownPublisher);
 
         when(bookRepository.findById(1)).thenReturn(Optional.of(battleOfTheMind));
         when(publisherRepository.findById(999)).thenReturn(Optional.empty());
@@ -342,8 +350,8 @@ class BookServiceTest {
         zondervan.setName("Zondervan");
 
         Book updatedDetails = new Book();
-        updatedDetails.setAuthor_id(2);
-        updatedDetails.setPublisher_id(2);
+        updatedDetails.setAuthorEntity(rickWarren);
+        updatedDetails.setPublisherEntity(zondervan);
 
         when(bookRepository.findById(1)).thenReturn(Optional.of(battleOfTheMind));
         when(authorRepository.findById(2)).thenReturn(Optional.of(rickWarren));
@@ -355,22 +363,30 @@ class BookServiceTest {
 
         // Assert
         assertNotNull(result);
-        assertEquals(2, battleOfTheMind.getAuthor_id());
-        assertEquals(2, battleOfTheMind.getPublisher_id());
+        assertEquals(2, battleOfTheMind.getAuthorEntity().getId());
+        assertEquals(2, battleOfTheMind.getPublisherEntity().getId());
         verify(bookRepository, times(1)).findById(1);
         verify(authorRepository, times(1)).findById(2);
         verify(publisherRepository, times(1)).findById(2);
         verify(bookRepository, times(1)).save(battleOfTheMind);
 
-        System.out.println("Test passed: Both Author ID and Publisher ID updated to 2");
+        System.out.println("Test passed: Both Author and Publisher updated");
     }
 
     @Test
     void updateBookById_WhenBothIdsNotFound_ShouldThrowCombinedIllegalArgumentException() {
         // Arrange
+        Author unknownAuthor = new Author();
+        unknownAuthor.setId(999);
+        unknownAuthor.setName("Unknown Author");
+
+        Publisher unknownPublisher = new Publisher();
+        unknownPublisher.setId(888);
+        unknownPublisher.setName("Unknown Publisher");
+
         Book updatedDetails = new Book();
-        updatedDetails.setAuthor_id(999);
-        updatedDetails.setPublisher_id(888);
+        updatedDetails.setAuthorEntity(unknownAuthor);
+        updatedDetails.setPublisherEntity(unknownPublisher);
 
         when(bookRepository.findById(1)).thenReturn(Optional.of(battleOfTheMind));
         when(authorRepository.findById(999)).thenReturn(Optional.empty());

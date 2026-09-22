@@ -1,7 +1,9 @@
 package com.library.management.library_management.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.library.management.library_management.model.Author;
 import com.library.management.library_management.model.Book;
+import com.library.management.library_management.model.Publisher;
 import com.library.management.library_management.service.BookService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -38,14 +40,22 @@ class BookControllerTest {
 
     @BeforeEach
     void setUp() {
+        Author author = new Author();
+        author.setId(1);
+        author.setName("Rick Warren");
+
+        Publisher publisher = new Publisher();
+        publisher.setId(1);
+        publisher.setName("Zondervan");
+
         testBook = new Book();
         testBook.setId(1);
         testBook.setTitle("The Purpose Driven Life");
         testBook.setCategory("Christian Living");
         testBook.setAuthor("Rick Warren");
-        testBook.setAuthor_id(1);
+        testBook.setAuthorEntity(author);
         testBook.setPublisher("Zondervan");
-        testBook.setPublisher_id(1);
+        testBook.setPublisherEntity(publisher);
         testBook.setCoverImageKey("books/cover.jpg");
     }
 
@@ -74,11 +84,22 @@ class BookControllerTest {
     @Test
     void getAllBooks_ShouldReturnListOfBooks() throws Exception {
         // Arrange
+        Author author2 = new Author();
+        author2.setId(2);
+        author2.setName("C.S. Lewis");
+
+        Publisher publisher2 = new Publisher();
+        publisher2.setId(2);
+        publisher2.setName("HarperCollins");
+
         Book book2 = new Book();
         book2.setId(2);
         book2.setTitle("Mere Christianity");
         book2.setCategory("Theology");
         book2.setAuthor("C.S. Lewis");
+        book2.setAuthorEntity(author2);
+        book2.setPublisher("HarperCollins");
+        book2.setPublisherEntity(publisher2);
 
         List<Book> books = Arrays.asList(testBook, book2);
         when(bookService.getAllBooks()).thenReturn(books);
@@ -254,14 +275,22 @@ class BookControllerTest {
 
         // Act & Assert
         for (int i = 0; i < 10; i++) {
+            Author author = new Author();
+            author.setId(i + 1);
+            author.setName(authors[i]);
+
+            Publisher publisher = new Publisher();
+            publisher.setId(i + 1);
+            publisher.setName(publishers[i]);
+
             Book book = new Book();
             book.setId(i + 1);
             book.setTitle(titles[i]);
             book.setCategory("Christian Living");
             book.setAuthor(authors[i]);
-            book.setAuthor_id(i + 1);
+            book.setAuthorEntity(author);
             book.setPublisher(publishers[i]);
-            book.setPublisher_id(i + 1);
+            book.setPublisherEntity(publisher);
             book.setCoverImageKey("books/cover" + (i + 1) + ".jpg");
 
             when(bookService.createBook(any(Book.class), any())).thenReturn(book);
