@@ -46,4 +46,6 @@ public class MemberService {
         memberRepository.deleteById(id);
     }
 
+
+
 }
