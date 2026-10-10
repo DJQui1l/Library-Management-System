@@ -45,7 +45,4 @@ public class MemberService {
     public void deleteMember(Integer id) {
         memberRepository.deleteById(id);
     }
-
-
-
 }
